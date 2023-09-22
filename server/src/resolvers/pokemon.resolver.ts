@@ -33,6 +33,18 @@ export const createOne = (
     ...args.pokemon,
     id: nextId,
   };
-  POKEDEX_MAP[`${nextId}`] = pokemon;
+  POKEDEX_MAP[nextId] = pokemon;
   return pokemon;
+};
+
+export const update = (
+  _,
+  args: { id: number; pokemon: Partial<Omit<Pokemon, "id">> }
+): Pokemon => {
+  POKEDEX_MAP[args.id] = {
+    ...POKEDEX_MAP[args.id],
+    ...args.pokemon,
+    base: { ...POKEDEX_MAP[args.id].base, ...(args.pokemon.base || {}) },
+  };
+  return POKEDEX_MAP[args.id];
 };

@@ -4,17 +4,18 @@ import {
   GraphQLNonNull,
   GraphQLList,
   GraphQLInputObjectType,
+  GraphQLInt,
 } from "graphql";
 import { Pokemon, PokemonBaseProperties, PokemonTypeEnum } from "./base.schema";
-import { createOne } from "../../resolvers/pokemon.resolver";
+import { createOne, update } from "../../resolvers/pokemon.resolver";
 
 const PokemonBaseInput = new GraphQLInputObjectType({
   name: "PokemonBaseInput",
   fields: PokemonBaseProperties,
 });
 
-const PokemonInput = new GraphQLInputObjectType({
-  name: "PokemonInput",
+const PokemonCreateInput = new GraphQLInputObjectType({
+  name: "PokemonCreateInput",
   fields: {
     name: {
       type: new GraphQLNonNull(GraphQLString),
@@ -28,6 +29,21 @@ const PokemonInput = new GraphQLInputObjectType({
   },
 });
 
+const PokemonUpdateInput = new GraphQLInputObjectType({
+  name: "PokemonUpdateInput",
+  fields: {
+    name: {
+      type: GraphQLString,
+    },
+    base: {
+      type: PokemonBaseInput,
+    },
+    type: {
+      type: new GraphQLList(PokemonTypeEnum),
+    },
+  },
+});
+
 export default new GraphQLObjectType({
   name: "Mutation",
   fields: {
@@ -35,10 +51,22 @@ export default new GraphQLObjectType({
       type: Pokemon,
       args: {
         pokemon: {
-          type: PokemonInput,
+          type: PokemonCreateInput,
         },
       },
       resolve: createOne,
+    },
+    update: {
+      type: Pokemon,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLInt),
+        },
+        pokemon: {
+          type: new GraphQLNonNull(PokemonUpdateInput),
+        },
+      },
+      resolve: update,
     },
   },
 });
