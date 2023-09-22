@@ -1,7 +1,7 @@
 import express from "express";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServer } from "@apollo/server";
-import pokemonSchema from "./schemas/pokemon.schema";
+import pokemonSchema from "./schemas/pokemon";
 
 const server = new ApolloServer({
   schema: pokemonSchema,
