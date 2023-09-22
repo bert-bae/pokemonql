@@ -7,7 +7,8 @@ import {
   GraphQLInt,
 } from "graphql";
 import { Pokemon, PokemonBaseProperties, PokemonTypeEnum } from "./base.schema";
-import { createOne, update } from "../../resolvers/pokemon.resolver";
+import { createOne, destroy, update } from "../../resolvers/pokemon.resolver";
+import { Void } from "../extensions.schema";
 
 const PokemonBaseInput = new GraphQLInputObjectType({
   name: "PokemonBaseInput",
@@ -67,6 +68,15 @@ export default new GraphQLObjectType({
         },
       },
       resolve: update,
+    },
+    destroy: {
+      type: Void,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLInt),
+        },
+      },
+      resolve: destroy,
     },
   },
 });

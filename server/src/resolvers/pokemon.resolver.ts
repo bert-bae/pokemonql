@@ -48,3 +48,7 @@ export const update = (
   };
   return POKEDEX_MAP[args.id];
 };
+
+export const destroy = (_, args: { id: number }): void => {
+  delete POKEDEX_MAP[args.id];
+};
